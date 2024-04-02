@@ -59,12 +59,22 @@ fun ScreenContent(modifier: Modifier) {
     val viewModel: MainViewModel = viewModel()
     val data = viewModel.data
 
-    LazyColumn(
-        modifier = modifier.fillMaxSize()
-    ) {
-        items(data) {
-            ListItem(task = it)
-            Divider()
+    if (data.isEmpty()) {
+        Column (
+            modifier = modifier.fillMaxSize().padding(16.dp),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(text = stringResource(id = R.string.list_kosong))
+        }
+    } else {
+        LazyColumn(
+            modifier = modifier.fillMaxSize()
+        ) {
+            items(data) {
+                ListItem(task = it)
+                Divider()
+            }
         }
     }
 }
