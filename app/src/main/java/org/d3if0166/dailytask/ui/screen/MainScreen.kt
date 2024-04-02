@@ -12,8 +12,10 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.d3if0166.dailytask.R
+import org.d3if0166.dailytask.ui.theme.DailyTaskTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -43,5 +45,13 @@ fun ScreenContent(modifier: Modifier) {
             .padding(16.dp)
     ) {
 
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun GreetingPreview() {
+    DailyTaskTheme {
+        MainScreen()
     }
 }
