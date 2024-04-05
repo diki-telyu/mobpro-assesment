@@ -2,6 +2,7 @@ package org.d3if0166.dailytask.ui.screen
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -182,7 +183,8 @@ fun ScreenContent(modifier: Modifier) {
         }
     } else {
         LazyColumn(
-            modifier = modifier.fillMaxSize()
+            modifier = modifier.fillMaxSize(),
+            contentPadding = PaddingValues(bottom = 84.dp)
         ) {
             items(data) {
                 ListItem(task = it)
@@ -200,7 +202,7 @@ fun ListItem(task: Task) {
             .fillMaxWidth()
             .padding(10.dp, 0.dp),
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.Center
+        horizontalArrangement = Arrangement.Center,
     )
     {
         Checkbox(
@@ -212,7 +214,7 @@ fun ListItem(task: Task) {
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
+            verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
 
             Text(
