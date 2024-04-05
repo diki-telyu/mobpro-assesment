@@ -15,6 +15,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Checkbox
@@ -22,6 +23,7 @@ import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
@@ -47,10 +49,13 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import org.d3if0166.dailytask.R
 import org.d3if0166.dailytask.model.Task
 import org.d3if0166.dailytask.ui.theme.DailyTaskTheme
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
+import org.d3if0166.dailytask.navigation.Screen
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainScreen() {
+fun MainScreen(navController: NavHostController) {
     val context = LocalContext.current
     val openDialog = remember { mutableStateOf(false) }
     var namaTugas by remember { mutableStateOf("") }
@@ -67,7 +72,20 @@ fun MainScreen() {
             colors = TopAppBarDefaults.mediumTopAppBarColors(
                 containerColor = MaterialTheme.colorScheme.primaryContainer,
                 titleContentColor = MaterialTheme.colorScheme.primary,
-            )
+            ),
+            actions = {
+                IconButton(
+                    onClick = {
+                        navController.navigate(Screen.About.route)
+                    }
+                ) {
+                    Icon(
+                        imageVector = Icons.Outlined.Info,
+                        contentDescription = stringResource(id = R.string.tentang_aplikasi),
+                        tint = MaterialTheme.colorScheme.primary
+                    )
+                }
+            }
         )
     },
         floatingActionButton = {
@@ -245,6 +263,6 @@ fun ListItem(task: Task, onClick: () -> Unit) {
 @Composable
 fun GreetingPreview() {
     DailyTaskTheme {
-        MainScreen()
+        MainScreen(rememberNavController())
     }
 }

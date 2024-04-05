@@ -10,4 +10,7 @@
     <string name="tombol_batal">Cancel</string>
     <string name="input_invalid">Can not be empty</string>
     <string name="x_diklik">%1$s clicked!</string>
+    <string name="copyright">Daily Task is a simple task management application designed to help users organize and track their daily tasks easily. With Daily Task, you can create your daily task lists, add descriptions to each task, and set deadlines for them. Copyright @ 2024 Diki Rahman. All rights reserved.</string>
+    <string name="tentang_aplikasi">About</string>
+    <string name="kembali">Back</string>
 </resources>
