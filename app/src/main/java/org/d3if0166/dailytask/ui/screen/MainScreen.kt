@@ -221,6 +221,14 @@ fun ListItem(task: Task) {
                 overflow = TextOverflow.Ellipsis,
                 fontWeight = FontWeight.Bold
             )
+
+            if (!task.detail.isEmpty())
+                Text(
+                    text = task.detail,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    fontWeight = FontWeight.Normal
+                )
         }
     }
 }
