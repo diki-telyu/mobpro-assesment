@@ -2,4 +2,5 @@
 <resources>
     <string name="app_name">Daily Task</string>
     <string name="list_kosong">Empty</string>
+    <string name="buat_tugas">Create task</string>
 </resources>
