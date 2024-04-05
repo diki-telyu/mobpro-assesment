@@ -3,4 +3,10 @@
     <string name="app_name">Daily Task</string>
     <string name="list_kosong">Empty</string>
     <string name="buat_tugas">Create task</string>
+    <string name="field_nama_tugas">Task name</string>
+    <string name="field_tenggat_tugas">Due date</string>
+    <string name="field_deskripsi_tugas">Detail</string>
+    <string name="tombol_simpan">Save</string>
+    <string name="tombol_batal">Cancel</string>
+    <string name="input_invalid">Can not be empty</string>
 </resources>

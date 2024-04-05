@@ -2,4 +2,10 @@
     <string name="app_name">Daily Task</string>
     <string name="list_kosong">Belum ada tugas</string>
     <string name="buat_tugas">Buat tugas</string>
+    <string name="field_nama_tugas">Nama tugas</string>
+    <string name="field_tenggat_tugas">Tenggat waktu</string>
+    <string name="field_deskripsi_tugas">Detail</string>
+    <string name="tombol_simpan">Simpan</string>
+    <string name="tombol_batal">Batal</string>
+    <string name="input_invalid">Tidak boleh kosong</string>
 </resources>
