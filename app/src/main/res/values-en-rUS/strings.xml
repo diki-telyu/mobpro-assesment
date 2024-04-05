@@ -9,4 +9,5 @@
     <string name="tombol_simpan">Save</string>
     <string name="tombol_batal">Cancel</string>
     <string name="input_invalid">Can not be empty</string>
+    <string name="x_diklik">%1$s clicked!</string>
 </resources>

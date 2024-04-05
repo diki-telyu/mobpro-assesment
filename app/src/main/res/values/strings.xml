@@ -8,4 +8,5 @@
     <string name="tombol_simpan">Simpan</string>
     <string name="tombol_batal">Batal</string>
     <string name="input_invalid">Tidak boleh kosong</string>
+    <string name="x_diklik">%1$s diklik!</string>
 </resources>
