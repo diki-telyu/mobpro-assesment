@@ -1,5 +1,6 @@
 package org.d3if0166.dailytask.ui.screen
 
+import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -147,7 +148,7 @@ fun ScreenContent(showList: Boolean, modifier: Modifier, navController: NavContr
                 contentPadding = PaddingValues(bottom = 84.dp)
             ) {
                 items(data) {
-                    ListItem(task = it) {
+                    ListItem(task = it, viewModel = viewModel) {
                         navController.navigate(Screen.FormUbah.withId(it.id))
                     }
                     Divider()
@@ -162,7 +163,7 @@ fun ScreenContent(showList: Boolean, modifier: Modifier, navController: NavContr
                 modifier = modifier.fillMaxSize()
             ) {
                 items(data) {
-                    GridItem(task = it) {
+                    GridItem(task = it, viewModel = viewModel) {
                         navController.navigate(Screen.FormUbah.withId(it.id))
                     }
                 }
@@ -172,8 +173,10 @@ fun ScreenContent(showList: Boolean, modifier: Modifier, navController: NavContr
 }
 
 @Composable
-fun ListItem(task: Task, onClick: () -> Unit) {
+fun ListItem(task: Task, viewModel: MainViewModel, onClick: () -> Unit,) {
     val checkedState = remember { mutableStateOf(false) }
+    val context = LocalContext.current
+
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -183,8 +186,13 @@ fun ListItem(task: Task, onClick: () -> Unit) {
     )
     {
         Checkbox(
-            checked = checkedState.value,
-            onCheckedChange = { checkedState.value = it },
+            checked = !task.status,
+            onCheckedChange = { isChecked ->
+//                checkedState.value = isChecked
+                // Perbarui status Task saat checkbox diklik
+                viewModel.taskDone(task.id)
+                Toast.makeText(context, R.string.selesai, Toast.LENGTH_LONG).show()
+            },
         )
         Column(
             modifier = Modifier
@@ -213,8 +221,9 @@ fun ListItem(task: Task, onClick: () -> Unit) {
 }
 
 @Composable
-fun GridItem(task: Task, onClick: () -> Unit) {
+fun GridItem(task: Task, viewModel: MainViewModel, onClick: () -> Unit) {
     val checkedState = remember { mutableStateOf(false) }
+    val context = LocalContext.current
 
     Card(
         modifier = Modifier
@@ -231,8 +240,13 @@ fun GridItem(task: Task, onClick: () -> Unit) {
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             Checkbox(
-                checked = checkedState.value,
-                onCheckedChange = { checkedState.value = it },
+                checked = !task.status,
+                onCheckedChange = { isChecked ->
+//                    checkedState.value = isChecked
+                    // Perbarui status Task saat checkbox diklik
+                    viewModel.taskDone(task.id)
+                    Toast.makeText(context, R.string.selesai, Toast.LENGTH_LONG).show()
+                }
             )
             Text(
                 text = task.judul,
@@ -248,7 +262,6 @@ fun GridItem(task: Task, onClick: () -> Unit) {
         }
     }
 }
-
 @Preview(showBackground = true)
 @Composable
 fun GreetingPreview() {

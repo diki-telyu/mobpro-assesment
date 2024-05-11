@@ -19,4 +19,6 @@
     <string name="lainnya">Other options</string>
     <string name="list">List display</string>
     <string name="grid">Grid display</string>
+    <string name="done">Task done!</string>
+    <string name="selesai">Task done!</string>
 </resources>

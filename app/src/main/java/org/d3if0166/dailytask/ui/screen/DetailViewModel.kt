@@ -18,6 +18,7 @@ class DetailViewModel(private val dao: TaskDao) : ViewModel() {
             judul = judul,
             detail = isi,
             tanggal = formatter.format(Date()),
+            status = true
         )
 
         viewModelScope.launch(Dispatchers.IO) {
@@ -31,6 +32,7 @@ class DetailViewModel(private val dao: TaskDao) : ViewModel() {
             judul = judul,
             detail = isi,
             tanggal = formatter.format(Date()),
+            status = true
         )
 
         viewModelScope.launch(Dispatchers.IO) {

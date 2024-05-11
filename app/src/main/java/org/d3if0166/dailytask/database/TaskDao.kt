@@ -15,7 +15,7 @@ interface TaskDao {
     @Update
     suspend fun update(tasks: Task)
 
-    @Query("SELECT * FROM tasks ORDER BY tanggal DESC")
+    @Query("SELECT * FROM tasks WHERE status=true ORDER BY tanggal DESC")
     fun getTasks(): Flow<List<Task>>
 
     @Query("SELECT * FROM tasks WHERE id = :id")
@@ -23,4 +23,7 @@ interface TaskDao {
 
     @Query("DELETE FROM tasks WHERE id = :id")
     suspend fun deleteById(id: Long)
+
+    @Query("UPDATE tasks SET status=false WHERE id = :id")
+    suspend fun setTaskDone(id: Long)
 }
