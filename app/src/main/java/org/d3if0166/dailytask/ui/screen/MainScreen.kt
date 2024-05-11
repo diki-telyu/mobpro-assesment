@@ -94,7 +94,8 @@ fun MainScreen(navController: NavHostController) {
         floatingActionButton = {
             FloatingActionButton(
                 onClick = {
-                    openDialog.value = true
+//                    openDialog.value = true
+                    navController.navigate(Screen.Form.route)
                 }
             ) {
                 Icon(

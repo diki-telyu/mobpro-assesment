@@ -8,7 +8,12 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
@@ -26,25 +31,44 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import org.d3if0166.dailytask.R
 import org.d3if0166.dailytask.ui.theme.DailyTaskTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DetailScreen() {
+fun DetailScreen(navController: NavController) {
     var nama_tugas by remember { mutableStateOf("") }
     var description by remember { mutableStateOf("") }
 
     Scaffold(
         topBar = {
             TopAppBar(
+                navigationIcon = {
+                    IconButton(onClick = { navController.popBackStack() }) {
+                        Icon(
+                            imageVector = Icons.Filled.ArrowBack,
+                            contentDescription = stringResource(id = R.string.kembali),
+                            tint = MaterialTheme.colorScheme.primary
+                        )
+                    }
+                },
                 title = {
                     Text(text = stringResource(id = R.string.buat_tugas))
                 },
                 colors = TopAppBarDefaults.mediumTopAppBarColors(
                     containerColor = MaterialTheme.colorScheme.primaryContainer,
                     titleContentColor = MaterialTheme.colorScheme.primary,
-                )
+                ),
+                actions = {
+                    IconButton(onClick = { navController.popBackStack() }) {
+                        Icon(
+                            imageVector = Icons.Filled.Check,
+                            contentDescription = stringResource(id = R.string.tombol_simpan)
+                        )
+                    }
+                }
             )
         }
     ) { padding ->
@@ -52,7 +76,7 @@ fun DetailScreen() {
             title = nama_tugas,
             onTitleChange = { nama_tugas = it },
             desc = description,
-            onDescChange = { description = it},
+            onDescChange = { description = it },
             modifier = Modifier.padding(padding)
         )
     }
@@ -62,9 +86,9 @@ fun DetailScreen() {
 fun FormTask(
     title: String, onTitleChange: (String) -> Unit,
     desc: String, onDescChange: (String) -> Unit,
-    modifier: Modifier
+    modifier: Modifier,
 ) {
-    Column (
+    Column(
         modifier = modifier
             .fillMaxSize()
             .padding(16.dp),
@@ -99,6 +123,6 @@ fun FormTask(
 @Composable
 fun DetailScreenPreview() {
     DailyTaskTheme {
-        DetailScreen()
+        DetailScreen(rememberNavController())
     }
 }
