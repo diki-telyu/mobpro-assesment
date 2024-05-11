@@ -33,6 +33,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -51,7 +52,9 @@ import org.d3if0166.dailytask.model.Task
 import org.d3if0166.dailytask.ui.theme.DailyTaskTheme
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import org.d3if0166.dailytask.database.TaskDb
 import org.d3if0166.dailytask.navigation.Screen
+import org.d3if0166.dailytask.ui.ViewModelFactory
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -188,9 +191,12 @@ fun ErrorHint(isError: Boolean) {
 
 @Composable
 fun ScreenContent(modifier: Modifier) {
-    val viewModel: MainViewModel = viewModel()
-    val data = viewModel.data
     val context = LocalContext.current
+    val db = TaskDb.getInstance(context)
+    val factory = ViewModelFactory(db.dao)
+    val viewModel: MainViewModel = viewModel(factory = factory)
+    val data by viewModel.data.collectAsState()
+
 
     if (data.isEmpty()) {
         Column (
