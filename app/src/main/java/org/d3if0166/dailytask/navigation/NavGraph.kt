@@ -7,6 +7,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import org.d3if0166.dailytask.ui.screen.AboutScreen
+import org.d3if0166.dailytask.ui.screen.DetailScreen
 import org.d3if0166.dailytask.ui.screen.MainScreen
 
 
@@ -21,6 +22,9 @@ fun SetupNavGraph(navController: NavController = rememberNavController()) {
         }
         composable(route = Screen.About.route) {
             AboutScreen(navController)
+        }
+        composable(route = Screen.Form.route) {
+            DetailScreen()
         }
     }
 }
