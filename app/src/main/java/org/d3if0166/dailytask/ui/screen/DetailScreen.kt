@@ -54,7 +54,7 @@ fun DetailScreen(navController: NavController, id: Long? = null) {
     val factory = ViewModelFactory(db.dao)
     val viewModel: DetailViewModel = viewModel(factory = factory)
 
-    var nama_tugas by remember { mutableStateOf("") }
+    var namaTugas by remember { mutableStateOf("") }
     var description by remember { mutableStateOf("") }
 
     var showDialog by remember { mutableStateOf(false) }
@@ -62,7 +62,7 @@ fun DetailScreen(navController: NavController, id: Long? = null) {
     LaunchedEffect(true) {
         if(id == null) return@LaunchedEffect
         val data = viewModel.getTask(id) ?: return@LaunchedEffect
-        nama_tugas = data.judul
+        namaTugas = data.judul
         description = data.detail
     }
 
@@ -90,14 +90,14 @@ fun DetailScreen(navController: NavController, id: Long? = null) {
                 ),
                 actions = {
                     IconButton(onClick = {
-                        if (nama_tugas == "") {
+                        if (namaTugas == "") {
                             Toast.makeText(context, R.string.input_invalid, Toast.LENGTH_LONG).show()
                             return@IconButton
                         }
                         if (id == null) {
-                            viewModel.insert(nama_tugas, description)
+                            viewModel.insert(namaTugas, description)
                         } else {
-                            viewModel.update(id, nama_tugas, description)
+                            viewModel.update(id, namaTugas, description)
                         }
                         navController.popBackStack()
                     }) {
@@ -124,8 +124,8 @@ fun DetailScreen(navController: NavController, id: Long? = null) {
         }
     ) { padding ->
         FormTask(
-            title = nama_tugas,
-            onTitleChange = { nama_tugas = it },
+            title = namaTugas,
+            onTitleChange = { namaTugas = it },
             desc = description,
             onDescChange = { description = it },
             modifier = Modifier.padding(padding)
