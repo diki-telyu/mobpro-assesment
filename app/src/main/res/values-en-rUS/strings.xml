@@ -14,4 +14,7 @@
     <string name="tentang_aplikasi">About</string>
     <string name="kembali">Back</string>
     <string name="edit_tugas">Update task</string>
+    <string name="pesan_hapus">Delete this task?</string>
+    <string name="tombol_hapus">Delete</string>
+    <string name="lainnya">Other options</string>
 </resources>

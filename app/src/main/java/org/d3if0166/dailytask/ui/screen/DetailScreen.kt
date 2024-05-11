@@ -11,6 +11,9 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -53,6 +56,8 @@ fun DetailScreen(navController: NavController, id: Long? = null) {
 
     var nama_tugas by remember { mutableStateOf("") }
     var description by remember { mutableStateOf("") }
+
+    var showDialog by remember { mutableStateOf(false) }
 
     LaunchedEffect(true) {
         if(id == null) return@LaunchedEffect
@@ -101,6 +106,19 @@ fun DetailScreen(navController: NavController, id: Long? = null) {
                             contentDescription = stringResource(id = R.string.tombol_simpan)
                         )
                     }
+                    if (id != null) {
+                        DeleteAction {
+                            showDialog = true
+                        }
+                        DisplayAlertDialog(
+                            openDialog = showDialog,
+                            onDismissRequest = { showDialog = false }
+                        ) {
+                            showDialog = false
+                            viewModel.delete(id)
+                            navController.popBackStack()
+                        }
+                    }
                 }
             )
         }
@@ -148,6 +166,30 @@ fun FormTask(
             ),
             modifier = Modifier.fillMaxSize()
         )
+    }
+}
+
+@Composable
+fun DeleteAction(delete: () -> Unit) {
+    var expanded by remember { mutableStateOf(false) }
+
+    IconButton(onClick = { expanded = true }) {
+        Icon(
+            imageVector =  Icons.Filled.MoreVert,
+            contentDescription = stringResource(R.string.lainnya),
+            tint = MaterialTheme.colorScheme.primary
+        )
+        DropdownMenu(
+            expanded = expanded,
+            onDismissRequest = { expanded = false }
+        ) {
+            DropdownMenuItem(
+                text = { Text(text = stringResource(R.string.tombol_hapus)) },
+                onClick = {
+                    expanded = false
+                    delete()
+                })
+        }
     }
 }
 

@@ -7,10 +7,13 @@
     <string name="field_tenggat_tugas">Tenggat waktu</string>
     <string name="field_deskripsi_tugas">Detail</string>
     <string name="tombol_simpan">Simpan</string>
-    <string name="tombol_batal">Batal</string>
     <string name="input_invalid">Nama tugas tidak boleh kosong</string>
     <string name="x_diklik">%1$s diklik!</string>
     <string name="copyright">Daily Task adalah aplikasi manajemen tugas sederhana yang dirancang untuk membantu pengguna dalam mengatur dan melacak tugas sehari-hari mereka dengan mudah. Dengan Daily Task, Anda dapat membuat daftar tugas harian Anda, menambahkan deskripsi untuk setiap tugas, serta menetapkan tanggal tenggat waktu untuk menyelesaikannya. \n\nCopyright @ 2024 Diki Rahman. \n All rights reserved.</string>
     <string name="tentang_aplikasi">Tentang aplikasi</string>
     <string name="kembali">Kembali</string>
+    <string name="pesan_hapus">Hapus task ini?</string>
+    <string name="tombol_hapus">Hapus</string>
+    <string name="tombol_batal">Batal</string>
+    <string name="lainnya">Opsi lainnya</string>
 </resources>
