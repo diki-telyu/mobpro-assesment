@@ -18,8 +18,6 @@ class MainViewModel(dao: TaskDao) : ViewModel() {
     private fun getDataDummy(): List<Task> {
         val data = mutableListOf<Task>()
 
-
-
         return data
     }
 }
