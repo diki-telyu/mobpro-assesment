@@ -17,4 +17,6 @@
     <string name="pesan_hapus">Delete this task?</string>
     <string name="tombol_hapus">Delete</string>
     <string name="lainnya">Other options</string>
+    <string name="list">List display</string>
+    <string name="grid">Grid display</string>
 </resources>
