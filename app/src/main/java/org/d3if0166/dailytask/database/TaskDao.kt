@@ -26,4 +26,8 @@ interface TaskDao {
 
     @Query("UPDATE tasks SET status=false WHERE id = :id")
     suspend fun setTaskDone(id: Long)
+
+    @Query("SELECT * FROM tasks WHERE status=false ORDER BY tanggal DESC")
+    fun getDoneTasks(): Flow<List<Task>>
+
 }

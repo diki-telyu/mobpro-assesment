@@ -17,10 +17,13 @@ import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.lazy.staggeredgrid.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.Divider
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -35,6 +38,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -68,6 +72,7 @@ fun MainScreen(navController: NavHostController) {
     val dataStore = SettingsDataStore(LocalContext.current)
     val showList by dataStore.layoutFlow.collectAsState(true)
 
+    var expanded by remember { mutableStateOf(false) }
 
     Scaffold(
         topBar = {
@@ -81,21 +86,53 @@ fun MainScreen(navController: NavHostController) {
                 ),
                 actions = {
                     IconButton(onClick = {
-                        CoroutineScope(Dispatchers.IO).launch {
-                            dataStore.saveLayout(!showList)
-                        }
+                        expanded = true
                     }) {
                         Icon(
-                            painter = painterResource(
-                                if (showList) R.drawable.baseline_grid_view_24
-                                else R.drawable.baseline_view_list_24
-                            ),
-                            contentDescription = stringResource(
-                                if (showList) R.string.grid
-                                else R.string.list
-                            ),
-                            tint = MaterialTheme.colorScheme.primary
+                            imageVector = Icons.Filled.MoreVert,
+                            contentDescription = stringResource(R.string.riwayat)
                         )
+                        DropdownMenu(
+                            expanded = expanded,
+                            onDismissRequest = { expanded = false },
+                            modifier = Modifier.padding(2.dp),
+
+                            ) {
+                            DropdownMenuItem(
+                                {
+                                    Icon(
+
+                                        painter = painterResource(R.drawable.baseline_history_24),
+                                        contentDescription = stringResource(R.string.riwayat)
+                                    )
+                                },
+                                onClick = {
+                                    expanded = false
+                                    navController.navigate(Screen.History.route)
+                                }
+                            )
+                            DropdownMenuItem(
+                                {
+                                    Icon(
+                                        painter = painterResource(
+                                            if (showList) R.drawable.baseline_grid_view_24
+                                            else R.drawable.baseline_view_list_24
+                                        ),
+                                        contentDescription = stringResource(
+                                            if (showList) R.string.grid
+                                            else R.string.list
+                                        ),
+                                        tint = MaterialTheme.colorScheme.primary
+                                    )
+                                },
+                                onClick = {
+                                    expanded = false
+                                    CoroutineScope(Dispatchers.IO).launch {
+                                        dataStore.saveLayout(!showList)
+                                    }
+                                }
+                            )
+                        }
                     }
                 }
             )
@@ -118,7 +155,6 @@ fun MainScreen(navController: NavHostController) {
         ) { padding ->
         ScreenContent(showList, Modifier.padding(padding), navController)
     }
-
 
 }
 
@@ -173,7 +209,7 @@ fun ScreenContent(showList: Boolean, modifier: Modifier, navController: NavContr
 }
 
 @Composable
-fun ListItem(task: Task, viewModel: MainViewModel, onClick: () -> Unit,) {
+fun ListItem(task: Task, viewModel: MainViewModel, onClick: () -> Unit) {
     val checkedState = remember { mutableStateOf(false) }
     val context = LocalContext.current
 
@@ -234,7 +270,7 @@ fun GridItem(task: Task, viewModel: MainViewModel, onClick: () -> Unit) {
         ),
         border = BorderStroke(1.dp, Color.Gray)
     ) {
-        Column (
+        Column(
             modifier = Modifier
                 .padding(8.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp)
@@ -262,6 +298,7 @@ fun GridItem(task: Task, viewModel: MainViewModel, onClick: () -> Unit) {
         }
     }
 }
+
 @Preview(showBackground = true)
 @Composable
 fun GreetingPreview() {

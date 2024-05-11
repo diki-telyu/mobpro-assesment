@@ -10,6 +10,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import org.d3if0166.dailytask.ui.screen.AboutScreen
 import org.d3if0166.dailytask.ui.screen.DetailScreen
+import org.d3if0166.dailytask.ui.screen.HistoryScreen
 import org.d3if0166.dailytask.ui.screen.KEY_ID_TASK
 import org.d3if0166.dailytask.ui.screen.MainScreen
 
@@ -39,8 +40,8 @@ fun SetupNavGraph(navController: NavController = rememberNavController()) {
             DetailScreen(navController, id)
         }
 
-//        composable(route = Screen.Form.route) {
-//            DetailScreen(navController)
-//        }
+        composable(route = Screen.History.route) {
+            HistoryScreen(navController)
+        }
     }
 }
