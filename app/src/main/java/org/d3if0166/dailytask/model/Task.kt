@@ -11,7 +11,7 @@ data class Task(
     val judul: String,
     val detail: String,
     val tanggal: String,
-    @ColumnInfo(defaultValue = true.toString())
+    @ColumnInfo(defaultValue = 1.toString())
     val status: Boolean,
 //    @ColumnInfo(defaultValue = false.toString())
 //    val checked: Boolean = false
