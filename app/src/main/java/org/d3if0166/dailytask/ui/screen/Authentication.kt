@@ -38,6 +38,7 @@ import androidx.credentials.GetCredentialRequest
 import androidx.credentials.GetCredentialResponse
 import androidx.credentials.exceptions.ClearCredentialException
 import androidx.credentials.exceptions.GetCredentialException
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.google.android.libraries.identity.googleid.GetGoogleIdOption
@@ -60,7 +61,7 @@ fun Authentication(navController: NavHostController) {
     val dataStore = UserDataStore(context)
     val user by dataStore.userFlow.collectAsState(User())
     var showDialog by remember { mutableStateOf(false) }
-    var isLogin by remember { mutableStateOf(false) }
+    val viewModel: AuthenticationModel = viewModel()
 
     LaunchedEffect(user) {
         if (user.email.isNotEmpty()) {
@@ -86,7 +87,7 @@ fun Authentication(navController: NavHostController) {
                 if (user.email.isEmpty()) {
                     CoroutineScope(Dispatchers.IO).launch {
                         signIn(
-                            context, dataStore, navController
+                            context, viewModel, dataStore,  navController
                         )
                     }
                 } else {
@@ -114,7 +115,9 @@ fun Authentication(navController: NavHostController) {
 }
 
 private suspend fun signIn(
-    context: Context, dataStore: UserDataStore,
+    context: Context,
+    viewModel: AuthenticationModel,
+    dataStore: UserDataStore,
     navController: NavHostController,
 ) {
     val googleIdOption: GetGoogleIdOption = GetGoogleIdOption.Builder()
@@ -129,14 +132,16 @@ private suspend fun signIn(
     try {
         val credentialManager = CredentialManager.create(context)
         val result = credentialManager.getCredential(context, request)
-        handleSignIn(result, dataStore, navController)
+        handleSignIn(result, viewModel ,dataStore, navController)
     } catch (e: GetCredentialException) {
         Log.e("SIGN-IN", "Error: ${e.errorMessage}")
     }
 }
 
 private suspend fun handleSignIn(
-    result: GetCredentialResponse, dataStore: UserDataStore,
+    result: GetCredentialResponse,
+    viewModel: AuthenticationModel,
+    dataStore: UserDataStore,
     navController: NavHostController,
 ) {
     val credential = result.credential
@@ -145,10 +150,11 @@ private suspend fun handleSignIn(
     ) {
         try {
             val googleId = GoogleIdTokenCredential.createFrom(credential.data)
-            val nama = googleId.displayName ?: ""
+            val name = googleId.displayName ?: ""
             val email = googleId.id
             val photoUrl = googleId.profilePictureUri.toString()
-            dataStore.saveData(User(nama, email, photoUrl))
+            dataStore.saveData(User(name, email, photoUrl))
+//            viewModel.saveData(name, email, photoUrl)
             // Ensure navigation happens on the main thread
             withContext(Dispatchers.Main) {
                 navController.navigate(Screen.Home.route) {

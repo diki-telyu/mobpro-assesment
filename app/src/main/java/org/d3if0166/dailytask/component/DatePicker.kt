@@ -87,7 +87,7 @@ fun CustomDatePicker(
                 Icon(
                     imageVector = Icons.Default.DateRange,
                     contentDescription = "Due date",
-                    tint = MaterialTheme.colorScheme.primary
+                    tint = Color(0xFF0D562D)
                 )
                 Text(
                     text = if (date.value.isEmpty()) "$label: " else "$label: ${date.value}",

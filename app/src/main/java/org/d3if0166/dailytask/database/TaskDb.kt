@@ -35,10 +35,10 @@ import org.d3if0166.dailytask.model.Task
 //}
 
 @Database(
-    version = 2,
+    version = 3,
     entities = [Task::class],
     autoMigrations = [
-        AutoMigration (from = 1, to = 2)
+        AutoMigration (from = 2, to = 3)
     ]
 )
 abstract class TaskDb : RoomDatabase() {

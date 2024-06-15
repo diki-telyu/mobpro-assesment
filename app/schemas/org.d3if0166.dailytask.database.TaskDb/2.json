@@ -2,21 +2,21 @@
   "formatVersion": 1,
   "database": {
     "version": 2,
-    "identityHash": "450007ab44a8ac10cf75461793525edc",
+    "identityHash": "e79b9434e7b1f05dac10a7afb1bc9d40",
     "entities": [
       {
         "tableName": "tasks",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `judul` TEXT NOT NULL, `detail` TEXT NOT NULL, `tanggal` TEXT NOT NULL, `status` INTEGER NOT NULL DEFAULT 1)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`task_id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT NOT NULL, `detail` TEXT NOT NULL, `due_date` TEXT NOT NULL, `is_completed` INTEGER NOT NULL DEFAULT true, `user_id` TEXT NOT NULL)",
         "fields": [
           {
-            "fieldPath": "id",
-            "columnName": "id",
+            "fieldPath": "task_id",
+            "columnName": "task_id",
             "affinity": "INTEGER",
             "notNull": true
           },
           {
-            "fieldPath": "judul",
-            "columnName": "judul",
+            "fieldPath": "name",
+            "columnName": "name",
             "affinity": "TEXT",
             "notNull": true
           },
@@ -27,23 +27,29 @@
             "notNull": true
           },
           {
-            "fieldPath": "tanggal",
-            "columnName": "tanggal",
+            "fieldPath": "due_date",
+            "columnName": "due_date",
             "affinity": "TEXT",
             "notNull": true
           },
           {
-            "fieldPath": "status",
-            "columnName": "status",
+            "fieldPath": "is_completed",
+            "columnName": "is_completed",
             "affinity": "INTEGER",
             "notNull": true,
-            "defaultValue": "1"
+            "defaultValue": "true"
+          },
+          {
+            "fieldPath": "user_id",
+            "columnName": "user_id",
+            "affinity": "TEXT",
+            "notNull": true
           }
         ],
         "primaryKey": {
           "autoGenerate": true,
           "columnNames": [
-            "id"
+            "task_id"
           ]
         },
         "indices": [],
@@ -53,7 +59,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '450007ab44a8ac10cf75461793525edc')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'e79b9434e7b1f05dac10a7afb1bc9d40')"
     ]
   }
 }

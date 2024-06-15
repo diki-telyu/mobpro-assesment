@@ -2,8 +2,10 @@ package org.d3if0166.dailytask.ui.screen
 
 import android.content.res.Configuration
 import android.os.Build
+import android.util.Log
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -29,11 +31,13 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -47,8 +51,15 @@ import androidx.navigation.compose.rememberNavController
 import org.d3if0166.dailytask.R
 import org.d3if0166.dailytask.component.CustomDatePicker
 import org.d3if0166.dailytask.database.TaskDb
+import org.d3if0166.dailytask.model.Task
+import org.d3if0166.dailytask.model.User
+import org.d3if0166.dailytask.network.TaskApi
+import org.d3if0166.dailytask.network.UserApi
+import org.d3if0166.dailytask.network.UserDataStore
 import org.d3if0166.dailytask.ui.theme.DailyTaskTheme
-import org.d3if0166.dailytask.util.ViewModelFactory
+import org.d3if0166.dailytask.util.SettingsDataStore
+
+//import org.d3if0166.dailytask.util.ViewModelFactory
 
 const val KEY_ID_TASK = "idTask"
 
@@ -57,21 +68,28 @@ const val KEY_ID_TASK = "idTask"
 @Composable
 fun DetailScreen(navController: NavController, id: Long? = null) {
     val context = LocalContext.current
-    val db = TaskDb.getInstance(context)
-    val factory = ViewModelFactory(db.dao)
-    val viewModel: DetailViewModel = viewModel(factory = factory)
 
-    var namaTugas by remember { mutableStateOf(" ") }
-    var buatTugas by remember { mutableStateOf("") }
-    var dueDate by remember { mutableStateOf("") }
+    var taskName by remember { mutableStateOf("") }
+    var taskDetail by remember { mutableStateOf("") }
+    var taskDueDate by remember { mutableStateOf("") }
     var showDialog by remember { mutableStateOf(false) }
+
+    val viewModel: MainViewModel = viewModel()
+
+    val gradientColors = listOf(
+        Color(0xFF0D562D),  // Hijau tua
+        Color(0xFF34A853)   // Hijau muda
+    )
 
     LaunchedEffect(id) {
         if (id == null) return@LaunchedEffect
-        val data = viewModel.getTask(id) ?: return@LaunchedEffect
-        namaTugas = data.judul
-        buatTugas = data.detail
-//        dueDate = data.dueDate
+        try {
+            val response = TaskApi.service.getTaskById(id)
+//                val task = response.()
+
+        } catch (e: Exception) {
+            Log.e("DetailScreen", "Exception while fetching task: ${e.message}")
+        }
     }
 
     Scaffold(
@@ -82,7 +100,7 @@ fun DetailScreen(navController: NavController, id: Long? = null) {
                         Icon(
                             imageVector = Icons.Filled.ArrowBack,
                             contentDescription = stringResource(id = R.string.kembali),
-                            tint = Color.Black
+                            tint = Color.White
                         )
                     }
                 },
@@ -93,26 +111,33 @@ fun DetailScreen(navController: NavController, id: Long? = null) {
                         Text(text = stringResource(id = R.string.edit_tugas))
                 },
                 colors = TopAppBarDefaults.mediumTopAppBarColors(
-                    containerColor = Color(0xFFFF9900),
-                    titleContentColor = Color.Black
+                    containerColor = Color.Transparent,  // Set to transparent as background will be covered by gradient
+                    titleContentColor = Color.White
                 ),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(
+                        brush = Brush.linearGradient(
+                            colors = gradientColors
+                        )
+                    ),
                 actions = {
                     IconButton(onClick = {
-                        if (namaTugas.isBlank()) {
+                        if (taskName.isBlank()) {
                             Toast.makeText(context, R.string.invalid, Toast.LENGTH_LONG).show()
                             return@IconButton
                         }
                         if (id == null) {
-                            viewModel.insert(namaTugas, buatTugas)
+                            viewModel.insert(taskName, taskDetail, taskDueDate, user_id = "dikirahman@gmail.com")
                         } else {
-                            viewModel.update(id, namaTugas, buatTugas)
+//                            viewModel.update(id, taskName, taskDetail, taskDueDate, user_id = "dikirahman@gmail.com")
                         }
                         navController.popBackStack()
                     }) {
                         Icon(
                             imageVector = Icons.Outlined.Check,
                             contentDescription = stringResource(id = R.string.tombol_simpan),
-                            tint = Color.Black
+                            tint = Color.White
                         )
                     }
                     if (id != null) {
@@ -123,7 +148,7 @@ fun DetailScreen(navController: NavController, id: Long? = null) {
                             openDialog = showDialog,
                             onDismissRequest = { showDialog = false }) {
                             showDialog = false
-                            viewModel.delete(id)
+//                            viewModel.delete(id)
                             navController.popBackStack()
                         }
                     }
@@ -132,11 +157,13 @@ fun DetailScreen(navController: NavController, id: Long? = null) {
         }
     ) { padding ->
         Form(
-            title = namaTugas,
-            onTitleChange = { namaTugas = it },
-            desc = buatTugas,
-            onDescChange = { buatTugas = it },
-            modifier = Modifier.padding(padding)
+            title = taskName,
+            onTitleChange = { taskName = it },
+            desc = taskDetail,
+            onDescChange = { taskDetail = it },
+            due_date = taskDueDate,
+            onDueDateChange = { taskDueDate = it },
+            modifier = Modifier.padding(padding),
         )
     }
 }
@@ -170,13 +197,14 @@ fun DeleteAction(delete: () -> Unit) {
     }
 }
 
+
 @RequiresApi(Build.VERSION_CODES.N)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Form(
     title: String, onTitleChange: (String) -> Unit,
     desc: String, onDescChange: (String) -> Unit,
-//    dueDate: String, onDueDateChange: (String) -> Unit,
+    due_date: String, onDueDateChange: (String) -> Unit,
     modifier: Modifier
 ) {
 
@@ -207,13 +235,13 @@ fun Form(
             ),
             modifier = Modifier.fillMaxWidth().height(120.dp) // Atur ketinggian sesuai kebutuhan
         )
-//        CustomDatePicker(
-//            label = "Tenggat Waktu",
-//            context = LocalContext.current,
-//            value = dueDate,
-//            onValueChange = onDueDateChange,
-//            modifier = Modifier.fillMaxWidth()
-//        )
+        CustomDatePicker(
+            label = "Tenggat Waktu",
+            context = LocalContext.current,
+            value = due_date,
+            onValueChange = onDueDateChange,
+            modifier = Modifier.fillMaxWidth()
+        )
 
     }
 

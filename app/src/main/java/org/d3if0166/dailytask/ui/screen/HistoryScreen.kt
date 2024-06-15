@@ -39,7 +39,7 @@ import org.d3if0166.dailytask.R
 import org.d3if0166.dailytask.database.TaskDb
 import org.d3if0166.dailytask.model.Task
 import org.d3if0166.dailytask.navigation.Screen
-import org.d3if0166.dailytask.util.ViewModelFactory
+//import org.d3if0166.dailytask.util.ViewModelFactory
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -76,34 +76,34 @@ fun HistoryScreen(navController: NavController) {
 
 @Composable
 fun ScreenContent(modifier: Modifier, navController: NavController) {
-    val context = LocalContext.current
-    val db = TaskDb.getInstance(context)
-    val factory = ViewModelFactory(db.dao)
-    val viewModel: HistoryViewModel = viewModel(factory = factory)
-    val data by viewModel.data.collectAsState()
-
-    if (data.isEmpty()) {
-        Column(
-            modifier = modifier
-                .fillMaxSize()
-                .padding(1.dp),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Text(text = stringResource(id = R.string.list_kosong))
-        }
-    } else {
-        LazyColumn(
-            modifier = modifier.fillMaxSize(),
-            contentPadding = PaddingValues(bottom = 84.dp)
-        ) {
-            items(data) {
-                ListHistoryItem(task = it, viewModel = viewModel) {
-                    navController.navigate(Screen.FormUbah.withId(it.id))
-                }
-            }
-        }
-    }
+//    val context = LocalContext.current
+//    val db = TaskDb.getInstance(context)
+//    val factory = ViewModelFactory(db.dao)
+//    val viewModel: HistoryViewModel = viewModel(factory = factory)
+//    val data by viewModel.data.collectAsState()
+//
+//    if (data.isEmpty()) {
+//        Column(
+//            modifier = modifier
+//                .fillMaxSize()
+//                .padding(1.dp),
+//            verticalArrangement = Arrangement.Center,
+//            horizontalAlignment = Alignment.CenterHorizontally
+//        ) {
+//            Text(text = stringResource(id = R.string.list_kosong))
+//        }
+//    } else {
+//        LazyColumn(
+//            modifier = modifier.fillMaxSize(),
+//            contentPadding = PaddingValues(bottom = 84.dp)
+//        ) {
+//            items(data) {
+//                ListHistoryItem(task = it, viewModel = viewModel) {
+//                    navController.navigate(Screen.FormUbah.withId(it.task_id))
+//                }
+//            }
+//        }
+//    }
 }
 
 @Composable
@@ -132,7 +132,7 @@ fun ListHistoryItem(task: Task, viewModel: HistoryViewModel, onClick: () -> Unit
         ) {
 
             Text(
-                text = task.judul,
+                text = task.name,
                 overflow = TextOverflow.Ellipsis,
                 fontWeight = FontWeight.Bold,
                 color = Color.Gray,
