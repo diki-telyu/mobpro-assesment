@@ -19,7 +19,11 @@
     <string name="lainnya">Other options</string>
     <string name="list">List display</string>
     <string name="grid">Grid display</string>
-    <string name="done">Task done!</string>
     <string name="selesai">Task done!</string>
     <string name="riwayat">History</string>
+    <string name="login">Login</string>
+    <string name="profil">Profile</string>
+    <string name="tutup">Close</string>
+    <string name="logout">Logout</string>
+    <string name="description">Deskription</string>
 </resources>

@@ -2,6 +2,7 @@ package org.d3if0166.dailytask.ui.screen
 
 import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -9,6 +10,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -41,6 +43,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -59,7 +62,9 @@ import kotlinx.coroutines.launch
 import org.d3if0166.dailytask.R
 import org.d3if0166.dailytask.database.TaskDb
 import org.d3if0166.dailytask.model.Task
+import org.d3if0166.dailytask.model.User
 import org.d3if0166.dailytask.navigation.Screen
+import org.d3if0166.dailytask.network.UserDataStore
 import org.d3if0166.dailytask.ui.theme.DailyTaskTheme
 import org.d3if0166.dailytask.util.SettingsDataStore
 import org.d3if0166.dailytask.util.ViewModelFactory
@@ -67,72 +72,124 @@ import org.d3if0166.dailytask.util.ViewModelFactory
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreen(navController: NavHostController) {
-//    val dateState = rememberDatePickerState()
+    var showDialog by remember { mutableStateOf(false) }
 
+    val context = LocalContext.current
+    val userDataStore = UserDataStore(context)
     val dataStore = SettingsDataStore(LocalContext.current)
+    val user by userDataStore.userFlow.collectAsState(initial = User())
     val showList by dataStore.layoutFlow.collectAsState(true)
 
     var expanded by remember { mutableStateOf(false) }
+
+    val gradientColors = listOf(
+        Color(0xFF0D562D),  // Hijau tua
+        Color(0xFF34A853), // Hijau muda
+    )
 
     Scaffold(
         topBar = {
             TopAppBar(
                 title = {
-                    Text(text = stringResource(id = R.string.app_name))
+                    Text(
+                        text = stringResource(id = R.string.app_name),
+                        color = Color.White
+                    )
                 },
                 colors = TopAppBarDefaults.mediumTopAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.primaryContainer,
-                    titleContentColor = MaterialTheme.colorScheme.primary,
+                    containerColor = Color.Transparent,  // Set to transparent as background will be covered by gradient
+                    titleContentColor = Color.White
                 ),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(
+                        brush = Brush.linearGradient(
+                            colors = gradientColors
+                        )
+                    ),
                 actions = {
-                    IconButton(onClick = {
-                        expanded = true
-                    }) {
+                    IconButton(onClick = { expanded = true }) {
                         Icon(
                             imageVector = Icons.Filled.MoreVert,
-                            contentDescription = stringResource(R.string.riwayat)
+                            contentDescription = stringResource(R.string.riwayat),
+                            tint = Color.Black
                         )
-                        DropdownMenu(
-                            expanded = expanded,
-                            onDismissRequest = { expanded = false },
-                            modifier = Modifier.padding(2.dp),
-
-                            ) {
-                            DropdownMenuItem(
-                                {
-                                    Icon(
-
-                                        painter = painterResource(R.drawable.baseline_history_24),
-                                        contentDescription = stringResource(R.string.riwayat)
-                                    )
-                                },
-                                onClick = {
-                                    expanded = false
-                                    navController.navigate(Screen.History.route)
-                                }
-                            )
-                            DropdownMenuItem(
-                                {
+                    }
+                    DropdownMenu(
+                        expanded = expanded,
+                        onDismissRequest = { expanded = false },
+                        modifier = Modifier.padding(2.dp)
+                    ) {
+                        DropdownMenuItem(
+                            onClick = {
+                                expanded = false
+                                showDialog = true
+                            },
+                            text = {
+                                Row(
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    modifier = Modifier.fillMaxWidth()
+                                ) {
                                     Icon(
                                         painter = painterResource(
-                                            if (showList) R.drawable.baseline_grid_view_24
-                                            else R.drawable.baseline_view_list_24
+                                            R.drawable.baseline_account_circle_24
                                         ),
-                                        contentDescription = stringResource(
-                                            if (showList) R.string.grid
-                                            else R.string.list
-                                        ),
-                                        tint = MaterialTheme.colorScheme.primary
+                                        contentDescription = stringResource(R.string.profil),
+                                        tint = Color.Black,
+                                        modifier = Modifier.padding(end = 12.dp)
                                     )
-                                },
-                                onClick = {
-                                    expanded = false
-                                    CoroutineScope(Dispatchers.IO).launch {
-                                        dataStore.saveLayout(!showList)
-                                    }
+                                    Text(
+                                        text = stringResource(R.string.profil),
+
+                                        )
                                 }
-                            )
-                        }
+                            }
+                        )
+                        DropdownMenuItem(
+                            onClick = {
+                                expanded = false
+                                navController.navigate(Screen.History.route)
+                            },
+                            text = {
+                                Row(
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    modifier = Modifier.fillMaxWidth()
+                                ) {
+                                    Icon(
+                                        painter = painterResource(R.drawable.baseline_history_24),
+                                        contentDescription = stringResource(R.string.riwayat),
+                                        modifier = Modifier.padding(end = 12.dp)
+                                    )
+                                    Text(
+                                        text = stringResource(R.string.riwayat),
+
+                                        )
+                                }
+                            }
+                        )
+                        DropdownMenuItem(
+                            onClick = {
+                                expanded = false
+                                showDialog = true
+                            },
+                            text = {
+                                Row(
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    modifier = Modifier.fillMaxWidth()
+                                ) {
+                                    Icon(
+                                        painter = painterResource(R.drawable.baseline_logout_24),
+                                        contentDescription = stringResource(R.string.logout),
+                                        tint = Color.Black,
+                                        modifier = Modifier.padding(end = 12.dp)
+                                    )
+                                    Text(
+                                        text = stringResource(R.string.logout),
+
+                                        )
+                                }
+                            }
+                        )
                     }
                 }
             )
@@ -141,12 +198,13 @@ fun MainScreen(navController: NavHostController) {
             FloatingActionButton(
                 onClick = {
                     navController.navigate(Screen.FormBaru.route)
-                }
+                },
+                containerColor = Color(0xFF34A853)
             ) {
                 Icon(
                     imageVector = Icons.Filled.Add,
-                    contentDescription = stringResource(id = R.string.buat_tugas),
-                    tint = MaterialTheme.colorScheme.primary,
+                    contentDescription = stringResource(id = R.string.description),
+                    tint = Color.White
                 )
             }
         },
@@ -156,6 +214,14 @@ fun MainScreen(navController: NavHostController) {
         ScreenContent(showList, Modifier.padding(padding), navController)
     }
 
+    if (showDialog) {
+        ProfilDialog(
+            user = user,
+            onDismissRequest = { showDialog = false }) {
+            CoroutineScope(Dispatchers.IO).launch { signOut(context, userDataStore, navController) }
+            showDialog = false
+        }
+    }
 }
 
 @Composable

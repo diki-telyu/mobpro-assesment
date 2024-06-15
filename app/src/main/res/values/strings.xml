@@ -20,4 +20,9 @@
     <string name="grid">Tampilan grid</string>
     <string name="selesai">Tugas selesai!</string>
     <string name="riwayat">Riwayat</string>
+    <string name="login">Masuk</string>
+    <string name="profil">Profil</string>
+    <string name="tutup">Tutup</string>
+    <string name="logout">Keluar</string>
+    <string name="description">Deskripsi</string>
 </resources>
