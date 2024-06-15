@@ -14,19 +14,11 @@ import java.util.Date
 import java.util.Locale
 
 class MainViewModel(private val dao: TaskDao) : ViewModel() {
-    private val formatter = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US)
-
     val data: StateFlow<List<Task>> = dao.getTasks().stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5000L),
         initialValue = emptyList()
     )
-
-    private fun getDataDummy(): List<Task> {
-        val data = mutableListOf<Task>()
-
-        return data
-    }
 
     fun taskDone(id: Long) {
         viewModelScope.launch(Dispatchers.IO) {

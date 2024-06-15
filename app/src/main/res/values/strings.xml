@@ -25,4 +25,7 @@
     <string name="tutup">Tutup</string>
     <string name="logout">Keluar</string>
     <string name="description">Deskripsi</string>
+    <string name="tambah_tugas">Tambah tugas</string>
+    <string name="invalid">Nama tugas harus di isi</string>
+    <string name="hapus">Hapus catatan</string>
 </resources>

@@ -1,5 +1,6 @@
 package org.d3if0166.dailytask.ui.screen
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
@@ -13,24 +14,27 @@ import java.util.Locale
 class DetailViewModel(private val dao: TaskDao) : ViewModel() {
     private val formatter = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US)
 
-    fun insert(judul: String, isi: String) {
+    fun insert(judul: String, detail: String) {
+
         val task = Task(
+
             judul = judul,
-            detail = isi,
+            detail = detail,
+//            dueDate = dueDate,
             tanggal = formatter.format(Date()),
             status = true
         )
-
         viewModelScope.launch(Dispatchers.IO) {
             dao.insert(task)
         }
     }
 
-    fun update(id: Long, judul: String, isi: String) {
+    fun update(id: Long, judul: String, detail: String) {
         val task = Task(
             id = id,
             judul = judul,
-            detail = isi,
+            detail = detail,
+//            dueDate = dueDate,
             tanggal = formatter.format(Date()),
             status = true
         )

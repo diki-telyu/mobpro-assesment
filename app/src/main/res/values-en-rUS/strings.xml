@@ -26,4 +26,7 @@
     <string name="tutup">Close</string>
     <string name="logout">Logout</string>
     <string name="description">Deskription</string>
+    <string name="tambah_tugas">Add task</string>
+    <string name="invalid">Task name cannot be empty</string>
+    <string name="hapus">Delete task</string>
 </resources>
